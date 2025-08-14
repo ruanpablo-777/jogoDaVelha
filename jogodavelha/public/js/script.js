@@ -5,28 +5,8 @@ let playerPointsX = document.getElementById("player-x")
 let playerPointsO = document.getElementById("player-o")
 let pontoX = 0
 let pontoO = 0
-let control = 0
+let control = 0 //variavel de controle para alternar entre o jogador X OU O
 let deuVelha = 0
-
-fetch('http://localhost:4000/results', {
-    method: 'GET',
-    headers: {
-        'Content-Type': 'application/json',
-    }
-   
-    })
-
-.then(response => response.json())
-.then(data => {
-    console.log('Resposta do servidor:', data);
-    console.log(data[0].points)
-    playerPointsX.innerHTML = 'pontos x= ' + data[0].points
-    pontoX = data[0].points
-})
-.catch(error => {
-    console.error('Erro ao enviar dados:', error);
-});
-
 
 let jgVelha = [
     ['','',''],
@@ -35,7 +15,7 @@ let jgVelha = [
 ]
 quadrado.forEach((element, number) => {
     element.addEventListener("click", () => {
-        if(element.innerHTML == '') {
+        if(element.innerHTML == '') { // SE o elemento estiver vazio ele vai ser preenchido com o jogador X OU O
             if(control % 2 == 0) {
                 element.innerHTML = "X"
                 player.innerHTML = "sua vez jogador O"
@@ -48,7 +28,8 @@ quadrado.forEach((element, number) => {
                 control++
             }
         }
-        switch (number) {
+
+        switch (number) { // de acordo com o conteudo que estiver dentro do quadrado ele armazena o valor em uma matriz
             case 0 :
                 jgVelha[0][0] = element.innerHTML
                 break
@@ -78,30 +59,15 @@ quadrado.forEach((element, number) => {
                 break
 
         }
-       
-
         
+        // jogador X
+        // se os quadrados estiverem preenchidos ele vai verificar se houve um ganhador
+        // essa parte verifica do jogador X
         if (jgVelha[0][0] == "X" && jgVelha[0][1] == "X" && jgVelha[0][2] == "X") {
             player.innerHTML = "Jogador X venceu !!"
             verifica.innerHTML = ''
             playerPointsX.innerHTML = `Pontos x = ${pontoX += 1}`
-            fetch('http://localhost:4000/update', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    player: 'X',
-                    points: 1, // Adiciona 1 ponto para o jogador X
-                }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Resposta do servidor:', data);
-            })
-            .catch(error => {
-                console.error('Erro ao enviar dados:', error);
-            });
+            regsX()
             restartJgVelha()
         }
         
@@ -109,12 +75,14 @@ quadrado.forEach((element, number) => {
             player.innerHTML = "Jogador X venceu !!"
             verifica.innerHTML = ''
             playerPointsX.innerHTML = `Pontos x = ${pontoX += 1}`
+             regsX()
             restartJgVelha()
         }
         else if (jgVelha[2][0] == "X" && jgVelha[2][1] == "X" && jgVelha[2][2] == "X") {
             player.innerHTML = "Jogador X venceu !!"
             verifica.innerHTML = ''
             playerPointsX.innerHTML = `Pontos x = ${pontoX += 1}`
+             regsX()
             restartJgVelha()
         }
 
@@ -123,18 +91,21 @@ quadrado.forEach((element, number) => {
             player.innerHTML = "Jogador X venceu !!"
             verifica.innerHTML = ''
             playerPointsX.innerHTML = `Pontos x = ${pontoX += 1}`
+             regsX()
             restartJgVelha()
         }
         else if (jgVelha[0][1]== "X" && jgVelha[1][1]== "X" && jgVelha[2][1] == "X") {
             player.innerHTML = "Jogador X venceu !!"
             verifica.innerHTML = ''
             playerPointsX.innerHTML = `Pontos x = ${pontoX += 1}`
+             regsX()
             restartJgVelha()
         }
         else if (jgVelha[0][2]== "X" && jgVelha[1][2]== "X" && jgVelha[2][2] == "X") {
             player.innerHTML = "Jogador X venceu !!"
             verifica.innerHTML = ''
             playerPointsX.innerHTML = `Pontos x = ${pontoX += 1}`
+             regsX()
             restartJgVelha()
         }
 
@@ -142,30 +113,36 @@ quadrado.forEach((element, number) => {
             player.innerHTML = "Jogador X venceu !!"
             verifica.innerHTML = ''
             playerPointsX.innerHTML = `Pontos x = ${pontoX += 1}`
+             regsX()
             restartJgVelha()
         }
         else if (jgVelha[0][2] == "X" && jgVelha[1][1] == "X" && jgVelha[2][0] == "X") {
             player.innerHTML = "Jogador X venceu !!"
             verifica.innerHTML = ''
             playerPointsX.innerHTML = `Pontos x = ${pontoX += 1}`
+             regsX()
             restartJgVelha()
         }
 
         // jogador O
+        // essa parte verifica do jogador O
 
         else if (jgVelha[0][0] == "O" && jgVelha[0][1] == "O" && jgVelha[0][2] == "O") {
             player.innerHTML = "Jogador O venceu !!"
             playerPointsO.innerHTML = `Pontos o = ${pontoO += 1}`
+             regsO()
             restartJgVelha()
         }
         else if (jgVelha[1][0] == "O" && jgVelha[1][1] == "O" && jgVelha[1][2] == "O") {
             player.innerHTML = "Jogador O venceu !!"
             playerPointsO.innerHTML = `Pontos o = ${pontoO += 1}`
+             regsO()
             restartJgVelha()
         }
         else if (jgVelha[2][0] == "O" && jgVelha[2][1] == "O" && jgVelha[2][2] == "O") {
             player.innerHTML = "Jogador O venceu !!"
             playerPointsO.innerHTML = `Pontos o = ${pontoO += 1}`
+             regsO()
             restartJgVelha()
         }
 
@@ -173,27 +150,32 @@ quadrado.forEach((element, number) => {
         else if (jgVelha[0][0] == "O" && jgVelha[1][0] == "O" && jgVelha[2][0] == "O") {
             player.innerHTML = "Jogador O venceu !!"
             playerPointsO.innerHTML = `Pontos o = ${pontoO += 1}`
+             regsO()
             restartJgVelha()
         }
         else if (jgVelha[0][1] == "O" && jgVelha[1][1] == "O" && jgVelha[2][1] == "O") {
             player.innerHTML = "Jogador O venceu !!"
             playerPointsO.innerHTML = `Pontos o = ${pontoO += 1}`
+             regsO()
             restartJgVelha()
         }
         else if (jgVelha[0][2] == "O" && jgVelha[1][2] == "O" && jgVelha[2][2] == "O") {
             player.innerHTML = "Jogador O venceu !!"
              playerPointsO.innerHTML = `Pontos o = ${pontoO += 1}`
+              regsO()
             restartJgVelha()
         }
 
         else if (jgVelha[0][0] == "O" && jgVelha[1][1] == "O" && jgVelha[2][2] == "O") {
             player.innerHTML = "Jogador O venceu !!"
             playerPointsO.innerHTML = `Pontos o = ${pontoO += 1}`
+             regsO()
             restartJgVelha()
         }
         else if (jgVelha[0][2] == "O" && jgVelha[1][1] == "O" && jgVelha[2][0] == "O") {
             player.innerHTML = "Jogador O venceu !!"
             playerPointsO.innerHTML = `Pontos o = ${pontoO += 1}`
+             regsO()
             restartJgVelha()
 
         } 
@@ -209,19 +191,4 @@ quadrado.forEach((element, number) => {
         console.log("controle: ",control)      
     })
 });
-
-function restartJgVelha() {
-    quadrado.forEach(element => {
-        element.innerHTML = ""
-    });
-
-    for( let l = 0; l < 3 ; l++){
-        for( let c = 0; c < 3; c++) {
-            jgVelha[l][c] = ""
-        }
-    }
-
-    deuVelha = 0
-    control = 0
-}
 

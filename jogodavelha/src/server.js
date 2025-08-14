@@ -32,9 +32,11 @@ app.get('/results', (req, res) => {
             res.status(500).send('Erro ao buscar resultados.')
         } else {
             res.status(200).json(results)
+            
         }
     });
 })
+
 // Rota para salvar pontos
 app.post('/update', (req, res) => {
     const { player, points } = req.body;
